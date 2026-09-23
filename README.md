@@ -301,4 +301,5 @@ CREATE TABLE IF NOT EXISTS TemperatureForecasts (
 * **導師**：煥哥（與你一起用 AI 寫程式，探索更大的世界！）
 * **願景**：*AI for Learning, AI for a Better Taiwan.*
 #   C W A  
+ #   C W A  
  
