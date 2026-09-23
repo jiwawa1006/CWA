@@ -1,0 +1,84 @@
+{
+  "success": "true",
+  "result": {
+    "resource_id": "F-A0010-001",
+    "fields": [
+      { "id": "datasetDescription", "type": "String" },
+      { "id": "locations", "type": "String" }
+    ]
+  },
+  "records": {
+    "locations": [
+      {
+        "datasetDescription": "臺灣各縣市一週天氣預報",
+        "locationsName": "臺灣",
+        "location": [
+          {
+            "locationName": "北部地區",
+            "weatherElement": [
+              {
+                "elementName": "MinT",
+                "description": "最低溫度",
+                "time": [
+                  {
+                    "startTime": "2026-04-14 06:00:00",
+                    "endTime": "2026-04-14 18:00:00",
+                    "elementValue": [{ "value": "18", "measures": "攝氏度" }]
+                  },
+                  {
+                    "startTime": "2026-04-15 06:00:00",
+                    "endTime": "2026-04-15 18:00:00",
+                    "elementValue": [{ "value": "19", "measures": "攝氏度" }]
+                  }
+                ]
+              },
+              {
+                "elementName": "MaxT",
+                "description": "最高溫度",
+                "time": [
+                  {
+                    "startTime": "2026-04-14 06:00:00",
+                    "endTime": "2026-04-14 18:00:00",
+                    "elementValue": [{ "value": "26", "measures": "攝氏度" }]
+                  },
+                  {
+                    "startTime": "2026-04-15 06:00:00",
+                    "endTime": "2026-04-15 18:00:00",
+                    "elementValue": [{ "value": "27", "measures": "攝氏度" }]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "locationName": "中部地區",
+            "weatherElement": [
+              {
+                "elementName": "MinT",
+                "description": "最低溫度",
+                "time": [
+                  {
+                    "startTime": "2026-04-14 06:00:00",
+                    "endTime": "2026-04-14 18:00:00",
+                    "elementValue": [{ "value": "20", "measures": "攝氏度" }]
+                  }
+                ]
+              },
+              {
+                "elementName": "MaxT",
+                "description": "最高溫度",
+                "time": [
+                  {
+                    "startTime": "2026-04-14 06:00:00",
+                    "endTime": "2026-04-14 18:00:00",
+                    "elementValue": [{ "value": "30", "measures": "攝氏度" }]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
