@@ -27,7 +27,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Constants & Default Configurations
-DEFAULT_API_URL = "https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-A0010-001"
+DEFAULT_API_URL = "https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0003-001"
 DEFAULT_TIMEOUT = 30
 DATA_DIR = Path(__file__).parent / "data"
 RAW_DATA_FILE = DATA_DIR / "weather_raw.json"
