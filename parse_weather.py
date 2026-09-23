@@ -303,15 +303,34 @@ def parse_weather_data(data: Union[Dict[str, Any], str, Path]) -> pd.DataFrame:
     return df
 
 
+def parse_and_validate_weather_data(
+    data: Union[Dict[str, Any], str, Path],
+    strict: bool = False
+):
+    """
+    Parses raw CWA JSON data and executes the validation layer.
+    
+    Returns:
+        Tuple of (validated_df, ValidationResult)
+    """
+    from validate_weather import validate_weather_dataframe
+    raw_df = parse_weather_data(data)
+    result = validate_weather_dataframe(raw_df, strict=strict)
+    return result.validated_df, result
+
+
 if __name__ == "__main__":
+    from validate_weather import validate_weather_dataframe
+
     raw_path = Path("data/weather_raw.json")
-    if raw_path.exists():
-        df = parse_weather_data(raw_path)
-        print("Parsed DataFrame from data/weather_raw.json:")
-        print(df)
-        print(f"Total rows: {len(df)}")
-    else:
-        sample_path = Path("tests/sample_weather.json")
-        df = parse_weather_data(sample_path)
-        print("Parsed DataFrame from tests/sample_weather.json:")
-        print(df)
+    target = raw_path if raw_path.exists() else Path("tests/sample_weather.json")
+
+    df = parse_weather_data(target)
+    val_result = validate_weather_dataframe(df)
+
+    print(f"Parsed DataFrame from {target}:")
+    print(val_result.validated_df)
+    print(f"Validation Status: {'PASSED' if val_result.is_valid else 'FAILED'}")
+    if val_result.errors:
+        print("Validation Errors:", val_result.errors)
+
