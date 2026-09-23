@@ -161,11 +161,25 @@ def save_raw_weather(data: Dict[str, Any], filepath: Path = RAW_DATA_FILE) -> Pa
     return filepath
 
 
+def fetch_and_save_weather(
+    api_key: Optional[str] = None,
+    api_url: Optional[str] = None,
+    timeout: Optional[int] = None,
+    filepath: Path = RAW_DATA_FILE
+) -> Dict[str, Any]:
+    """
+    Convenience function that fetches weather data from CWA API,
+    saves the raw JSON to disk, and returns the parsed JSON object.
+    """
+    data = fetch_weather_raw(api_key=api_key, api_url=api_url, timeout=timeout)
+    save_raw_weather(data, filepath=filepath)
+    return data
+
+
 def main():
     """CLI entry point for fetch_weather."""
     try:
-        data = fetch_weather_raw()
-        save_raw_weather(data)
+        fetch_and_save_weather()
         print("Successfully fetched and saved raw weather forecast data.")
     except CWAMissingAPIKeyError as e:
         print(f"Configuration Error: {e}", file=sys.stderr)
