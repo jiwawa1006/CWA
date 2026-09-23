@@ -5,3 +5,4 @@ folium>=0.15.0
 streamlit-folium>=0.17.0
 python-dotenv>=1.0.0
 pytest>=8.0.0
+pip-system-certs>=5.3.0
