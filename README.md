@@ -1,100 +1,91 @@
-# 🌤️ Taiwan Weather Forecast: From Meteorological Data to Interactive Web App
-### AI 創新微課程 | CWA API × JSON × Python × SQLite × Streamlit
+<div align="center">
 
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
-[![SQLite](https://img.shields.io/badge/SQLite-data.db-003B57.svg?logo=sqlite&logoColor=white)](https://www.sqlite.org/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.30%2B-FF4B4B.svg?logo=streamlit&logoColor=white)](https://streamlit.io/)
-[![Folium](https://img.shields.io/badge/Folium-Geospatial%20Map-77B800.svg?logo=leaflet&logoColor=white)](https://python-visualization.github.io/folium/)
-[![CWA Open Data](https://img.shields.io/badge/CWA%20API-F--A0010--001-blueviolet.svg)](https://opendata.cwa.gov.tw/)
+# 🌤️ Taiwan Weather Forecast Dashboard
+### 氣象資料到互動式天氣預報 Web 應用程式
+**CWA API × JSON × Python × SQLite × Streamlit**
 
-> *“技術可以解決問題，但更重要的是用技術創造更好的未來！” — 煥哥*  
-> *“Learn Today, Build Tomorrow. Code Smarter, Build a Better Tomorrow!”*  
-> *“用程式探索天氣・用資料看見台灣・用 AI 實現更多可能”*
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![SQLite](https://img.shields.io/badge/SQLite-data.db-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-Web_App-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Folium](https://img.shields.io/badge/Folium-Interactive_Map-77B800?style=for-the-badge&logo=leaflet&logoColor=white)](https://python-visualization.github.io/folium/)
+[![CWA API](https://img.shields.io/badge/CWA_Open_Data-F--A0010--001-blueviolet?style=for-the-badge)](https://opendata.cwa.gov.tw/)
 
----
+<br/>
 
-## 📖 目錄 (Table of Contents)
-
-- [專案簡介 (Overview)](#-專案簡介-overview)
-- [核心架構與數據流程 (Architecture & Data Flow)](#-核心架構與數據流程-architecture--data-flow)
-- [24 單元完整學習地圖 (24-Step Learning Roadmap)](#-24-單元完整學習地圖-24-step-learning-roadmap)
-  - [階段一：氣象資料獲取 (Modules 1–4)](#階段一氣象資料獲取-modules-14)
-  - [階段二：JSON 解析與資料整理 (Modules 5–7)](#階段二json-解析與資料整理-modules-57)
-  - [階段三：SQLite 資料庫設計與驗證 (Modules 8–10)](#階段三sqlite-資料庫設計與驗證-modules-810)
-  - [階段四：Streamlit 互動預報儀表板 (Modules 11–16)](#階段四streamlit-互動預報儀表板-modules-1116)
-  - [階段五：進階台灣地圖視覺化 (Modules 17–19)](#階段五進階台灣地圖視覺化-modules-1719)
-  - [階段六：工程品質、GitHub 與未來延伸 (Modules 20–24)](#階段六工程品質github-與未來延伸-modules-2024)
-- [專案目錄結構 (Project Structure)](#-專案目錄結構-project-structure)
-- [快速開始指南 (Quick Start Guide)](#-快速開始指南-quick-start-guide)
-- [資料庫綱要設計 (Database Schema)](#-資料庫綱要設計-database-schema)
-- [程式碼品質規範 (Code Quality & Best Practices)](#-程式碼品質規範-code-quality--best-practices)
-- [未來延伸應用 (Future Possibilities)](#-未來延伸應用-future-possibilities)
+> 💡 *「技術可以解決問題，但更重要的是用技術創造更好的未來！」* —— **煥哥**  
+> 🚀 *用程式探索天氣・用資料看見台灣・用 AI 實現更多可能*  
+> 🌟 **Learn Today, Build Tomorrow. Code Smarter, Build a Better Tomorrow!**
 
 ---
 
-## 🌟 專案簡介 (Overview)
+</div>
 
-本專案源自**「AI 創新微課程：從氣象資料到互動式天氣預報應用」**，由**煥哥**帶領，以 **AI × 資料 × 天氣 × 實作** 為核心主軸。
+## 📌 專案總覽 (Overview)
 
-從中央氣象署（CWA）獲取即時與一週預報開放資料，透過 Python 深度解析深層巢狀 JSON 結構，以標準關聯式資料庫 SQLite 完成資料儲存與結構化管理，並利用 Streamlit 構建包含**六大分區氣溫趨勢圖**、**數據清單**以及**全台互動式氣溫分布地圖**的現代化 Web 應用程式。
+本專案為 **「AI 創新微課程」** 核心實作專案，整合 **AI × 資料科學 × 氣象資料 × 現代 Web 應用**。  
+整體架構採用端到端（End-to-End）管線：
+1. **資料介接**：向中央氣象署（CWA）開放資料平臺請求 7 天預報原始資料（`F-A0010-001`）。
+2. **資料處理**：以 Python 剖析多層巢狀 JSON 結構，提取六大區域（北部、中部、南部、東北部、東部、東南部）之每日最高與最低氣溫。
+3. **資料庫管理**：存入標準 SQLite 資料庫（`data.db`），建立正規化結構並執行 SQL 查詢驗證。
+4. **前端視覺化**：透過 Streamlit 與 Folium 構建互動儀表板，支援區域篩選、一週氣溫趨勢折線圖、資料表以及全台溫標地圖。
 
 ---
 
-## 🔄 核心架構與數據流程 (Architecture & Data Flow)
+## 🔄 數據管線與系統架構 (Data Pipeline Architecture)
 
 ```mermaid
-flowchart TD
-    subgraph Data Acquisition
-        A1["中央氣象署 CWA Open Data<br/>(F-A0010-001)"] -->|"Requests (API Key)"| A2["原始 7 天預報 JSON 資料"]
+flowchart LR
+    subgraph S1["1. 資料獲取 (Ingestion)"]
+        API["📡 CWA Open Data<br/>(F-A0010-001)"] -->|"Requests (API Key)"| JSON["📄 7-Day Forecast<br/>JSON 原始資料"]
     end
 
-    subgraph Data Processing
-        A2 -->|"Python (json / dict parsing)"| B1["提取氣溫 (MinT / MaxT)"]
-        B1 -->|"Pandas DataFrame"| B2["清洗與結構化資料表"]
+    subgraph S2["2. 資料處理 (Processing)"]
+        JSON -->|"Python Parser"| EXT["🔍 提取 MinT / MaxT"]
+        EXT -->|"Pandas DataFrame"| CLEAN["🧹 結構化資料清洗"]
     end
 
-    subgraph Storage & Verification
-        B2 -->|"sqlite3 寫入"| C1[("SQLite 資料庫<br/>data.db")]
-        C1 -.->|"SQL 查詢驗證"| C2["檢查資料完整性與六大區分佈"]
+    subgraph S3["3. 資料儲存 (Storage)"]
+        CLEAN -->|"sqlite3 Insert"| DB[("💾 SQLite Database<br/>data.db")]
     end
 
-    subgraph Frontend & Visualization
-        C1 -->|"SQL Query"| D1["Streamlit Web App (app.py)"]
-        D1 --> E1["下拉選單切換分區"]
-        D1 --> E2["一週高低溫折線圖"]
-        D1 --> E3["一週詳細數據表格"]
-        D1 --> E4["Folium 台灣互動地圖<br/>(各區溫標與日均溫)"]
+    subgraph S4["4. 前端展示 (Visualization)"]
+        DB -->|"SQL Query"| APP["📊 Streamlit Web App<br/>(app.py)"]
+        APP --> V1["📈 高低溫趨勢折線圖"]
+        APP --> V2["📋 一週氣象明細表格"]
+        APP --> V3["🗺️ Folium 全台互動地圖"]
     end
+
+    style S1 fill:#f0f7ff,stroke:#0066cc,stroke-width:1px
+    style S2 fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+    style S3 fill:#fff7e6,stroke:#fa8c16,stroke-width:1px
+    style S4 fill:#f9f0ff,stroke:#722ed1,stroke-width:1px
 ```
 
 ---
 
-## 🗺️ 24 單元完整學習地圖 (24-Step Learning Roadmap)
+## 🗺️ 24 單元完整學習地圖 (Curriculum Roadmap)
 
-```text
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                              AI 創新微課程：24 單元學習脈絡                                │
-├────────────────────────┬────────────────────────┬──────────────────────────────────────┤
-│ 1. 課程介紹            │ 2. 台灣的天氣與生活    │ 3. 中央氣象署 CWA 平台               │
-│ 4. API 資料取得        │ 5. JSON 資料結構解析   │ 6. 提取最高與最低氣溫                │
-│ 7. 資料整理與預覽      │ 8. 建立 SQLite 資料庫  │ 9. 資料庫設計 (Schema)               │
-│ 10. 查詢資料驗證       │ 11. Streamlit 入門     │ 12. 從資料庫讀取資料 (SQL)           │
-│ 13. 下拉選單選擇地區   │ 14. 繪製氣溫折線圖     │ 15. 顯示一週資料表格                 │
-│ 16. 整合 Web App 介面  │ 17. 進階：台灣地圖視覺化│ 18. 選擇日期顯示地圖                 │
-│ 19. 完整成果展示       │ 20. 程式碼品質與優化   │ 21. 專案上傳至 GitHub                │
-│ 22. 延伸應用與想法     │ 23. 回顧與重點整理     │ 24. 下一步：繼續探索 (AI × Data)     │
-└────────────────────────┴────────────────────────┴──────────────────────────────────────┘
-```
+整體微課程分為六大階段、共 24 單元，按循序漸進原則實作：
 
-### 階段一：氣象資料獲取 (Modules 1–4)
-- **單元 1：課程介紹**  
-  - 了解 AI × 資料 × 天氣 × 實作的核心目標與學習地圖。
-- **單元 2：台灣的天氣與生活**  
-  - 理解氣象對生活、商業與防災的重要影響，體驗資料驅動決策（Data-Driven Decision Making）。
-- **單元 3：中央氣象署 CWA Open Data 平台**  
-  - 註冊開放資料平台帳號，申辦個人授權碼（API Key），選定目標資料集：**臺灣各縣市一週天氣預報（六大分區）**（代碼：`F-A0010-001`）。
-- **單元 4：API 資料取得 (Requests)**  
-  - 使用 Python `requests` 模組發送 HTTP GET 請求，以 JSON 格式獲取氣象原始數據。
+| 階段 | 單元範圍 | 核心主題 | 關鍵技術與產出 |
+| :---: | :---: | :--- | :--- |
+| **Phase 1** | 單元 01 ~ 04 | **氣象資料獲取** | CWA 帳號註冊、API Key 申請、Requests 請求 JSON |
+| **Phase 2** | 單元 05 ~ 07 | **JSON 解析與整理** | 巢狀 JSON 剖析、MinT/MaxT 提取、Pandas 結構化處理 |
+| **Phase 3** | 單元 08 ~ 10 | **SQLite 資料庫** | `data.db` 建立、`TemperatureForecasts` 表設計、SQL 驗證 |
+| **Phase 4** | 單元 11 ~ 16 | **Streamlit 預報儀表板** | 下拉選單切換、SQL 動態查詢、高低溫折線圖、一週數據表 |
+| **Phase 5** | 單元 17 ~ 19 | **進階地圖視覺化** | Folium 地圖整合、四色溫標區間、日期切換、地區氣溫 Popup |
+| **Phase 6** | 單元 20 ~ 24 | **工程品質與延伸應用** | 程式模組化、錯誤處理、GitHub 版本控管、LINE Bot/AI 延伸 |
+
+<details>
+<summary><b>🔍 點擊展開：24 個單元詳細教學與實作規範</b></summary>
+
+<br/>
+
+### 🔹 階段一：氣象資料獲取 (Modules 01–04)
+* **01. 課程介紹**：學習目標、整體學習地圖、專案成果演示。
+* **02. 台灣的天氣與生活**：氣候特徵分析、數據驅動決策與智慧生活情境。
+* **03. 中央氣象署 CWA 平台**：平臺註冊、取得個人 API 授權碼、選取資料集（`F-A0010-001`）。
+* **04. API 資料取得**：使用 `requests` 發起 GET 請求並驗證狀態碼：
   ```python
   import requests
 
@@ -104,113 +95,87 @@ flowchart TD
   data = resp.json()
   ```
 
----
-
-### 階段二：JSON 解析與資料整理 (Modules 5–7)
-- **單元 5：JSON 資料結構解析**  
-  - 剖析階層：`records -> locations -> location[] -> weatherElement[] -> time[]`。
-- **單元 6：提取最高與最低氣溫**  
-  - 鎖定氣溫關鍵欄位：`MinT`（最低溫）與 `MaxT`（最高溫），提取各時間區間數值。
-- **單元 7：資料整理與預覽 (Pandas)**  
-  - 使用 Pandas 轉換為乾淨結構化表格，檢視六大區域（北部、中部、南部、東北部、東部、東南部）一週資料：
+### 🔹 階段二：JSON 解析與資料整理 (Modules 05–07)
+* **05. JSON 資料結構解析**：拆解深層路徑：
+  ```text
+  records ➔ locations ➔ location[] ➔ weatherElement[] ➔ time[]
+  ```
+* **06. 提取最高與最低氣溫**：精準抽取 `MinT`（最低氣溫）與 `MaxT`（最高氣溫）。
+* **07. 資料整理與預覽**：透過 Pandas 建立清洗後的 Dataframe：
   | regionName | dataDate | minT | maxT |
   | :--- | :---: | :---: | :---: |
   | 北部地區 | 2026-04-14 | 18 | 26 |
   | 中部地區 | 2026-04-14 | 20 | 30 |
   | 南部地區 | 2026-04-14 | 22 | 31 |
 
----
+### 🔹 階段三：SQLite 資料庫設計與驗證 (Modules 08–10)
+* **08. 建立 SQLite 資料庫**：自動建立本機 `data.db` 儲存預報資料。
+* **09. 資料庫設計**：建立結構嚴謹的關聯式資料表：
+  ```sql
+  CREATE TABLE IF NOT EXISTS TemperatureForecasts (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      regionName TEXT NOT NULL,
+      dataDate TEXT NOT NULL,
+      minT REAL NOT NULL,
+      maxT REAL NOT NULL
+  );
+  ```
+* **10. 查詢資料驗證**：利用 SQL 確保全台六大區域資料寫入無誤：
+  ```sql
+  SELECT DISTINCT regionName FROM TemperatureForecasts;
+  SELECT * FROM TemperatureForecasts WHERE regionName = '中部地區';
+  ```
 
-### 階段三：SQLite 資料庫設計與驗證 (Modules 8–10)
-- **單元 8：建立 SQLite 資料庫**  
-  - 本地建立 `data.db`，將預報資料透過 Python 寫入資料庫。
-- **單元 9：資料庫設計 (TemperatureForecasts)**  
-  - 規劃資料表結構：
-    ```sql
-    CREATE TABLE IF NOT EXISTS TemperatureForecasts (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        regionName TEXT,
-        dataDate TEXT,
-        minT REAL,
-        maxT REAL
-    );
-    ```
-- **單元 10：查詢資料驗證**  
-  - 撰寫標準 SQL 語法驗證資料筆數與不重複地區：
-    ```sql
-    SELECT DISTINCT regionName FROM TemperatureForecasts;
-    SELECT * FROM TemperatureForecasts WHERE regionName = '中部地區';
-    ```
+### 🔹 階段四：Streamlit 互動預報儀表板 (Modules 11–16)
+* **11. Streamlit 入門**：快速構建 Web UI，認識元件與 Layout 配置。
+* **12. 從資料庫讀取資料**：透過 `sqlite3` + `pd.read_sql_query` 即時查詢。
+* **13. 下拉選單選擇地區**：提供六大區域選取切換（北部、中部、南部、東北部、東部、東南部）。
+* **14. 繪製折線圖**：動態繪製一週最高溫（紅色趨勢線）與最低溫（藍色趨勢線）。
+* **15. 顯示資料表格**：結構化展示 7 天完整的日期與溫度數值。
+* **16. 整合 Web App 介面**：完成具備一致性與現代質感的氣象資訊頁面。
 
----
+### 🔹 階段五：進階台灣地圖視覺化 (Modules 17–19)
+* **17. 台灣地圖視覺化**：整合 `folium` 與 `streamlit-folium` 渲染互動圖層。
+* **18. 選擇日期顯示地圖**：提供日期篩選下拉選單，地圖標記顯示該日各區氣溫 Popup。
+  * 🔵 `< 20°C`：藍色（涼爽 / 寒冷）
+  * 🟢 `20 - 25°C`：綠色（舒適）
+  * 🟡 `25 - 30°C`：黃色（溫暖）
+  * 🔴 `> 30°C`：紅色（炎熱）
+* **19. 完整成果展示**：儀表板與全台氣溫地圖聯動展示。
 
-### 階段四：Streamlit 互動預報儀表板 (Modules 11–16)
-- **單元 11：Streamlit 入門**  
-  - 快速建立 Web App，掌握元件基本架構與佈局方式。
-- **單元 12：從資料庫讀取資料**  
-  - 透過 `sqlite3` 與 `pd.read_sql_query` 於後端提取即時資料。
-- **單元 13：下拉選單選擇地區**  
-  - 使用 `st.selectbox` 提供北部、中部、南部、東北部、東部、東南部切換。
-- **單元 14：繪製折線圖**  
-  - 動態呈現一週每日最高溫（MaxT，紅線）與最低溫（MinT，藍線）趨勢。
-- **單元 15：顯示資料表格**  
-  - 清晰排版展示 7 天完整的日期、低溫、高溫表格。
-- **單元 16：整合 Web App 介面**  
-  - 打造高整合度的 Taiwan Weather Forecast 儀表板。
+### 🔹 階段六：工程品質、GitHub 與未來延伸 (Modules 20–24)
+* **20. 程式碼品質與優化**：
+  * 模組化職責分離（爬蟲、解析、DB、UI）。
+  * 加入健全的 `try-except` 錯誤處理機制。
+  * 冪等性設計：更新資料時防止重複累積膨脹。
+* **21. 專案上傳至 GitHub**：Git 版控、設定 `.gitignore` 防止敏感 API 金鑰洩漏。
+* **22. 延伸應用與想法**：天氣提醒 LINE Bot、旅遊推薦、農業防災智慧預警。
+* **23. 回顧與重點整理**：回顧端到端開發技能與 AI 協同開發實務。
+* **24. 下一步：繼續探索**：串接更多政府開放資料，開發個人代表作品集。
 
----
-
-### 階段五：進階台灣地圖視覺化 (Modules 17–19)
-- **單元 17：進階：台灣地圖視覺化 (Folium + Streamlit)**  
-  - 依當日平均溫度（(MinT + MaxT) / 2）區分顏色標記：
-    - 🔵 `< 20°C`：藍色（涼爽 / 寒冷）
-    - 🟢 `20 - 25°C`：綠色（舒適）
-    - 🟡 `25 - 30°C`：黃色（溫暖）
-    - 🔴 `> 30°C`：紅色（炎熱）
-- **單元 18：選擇日期顯示地圖**  
-  - 提供日期選擇器（`st.selectbox` / `st.date_input`），在地圖標籤中彈出地區資訊與當日氣溫。
-- **單元 19：完整成果展示 (Taiwan Weather Dashboard)**  
-  - 地圖與數據表格聯動展示，完整呈現全台氣象態勢。
-
----
-
-### 階段六：工程品質、GitHub 與未來延伸 (Modules 20–24)
-- **單元 20：程式碼品質與優化**  
-  - **模組化結構**：分離 API、解析、資料庫與介面。
-  - **容錯與錯誤處理機制**：處理網路逾時與欄位缺失。
-  - **冪等性設計**：重複執行資料處理程式時，更新或清空舊資料，不重複插入。
-  - **良好註解與型別提示**：保持程式碼易讀易維護。
-- **單元 21：專案上傳至 GitHub**  
-  - 版本控制、管理 `.gitignore`（防止 API Key 與本機 DB 外流）、Git commit 與 push。
-- **單元 22：延伸應用與想法**  
-  - 天氣提醒 LINE Bot、旅遊行程天氣推薦、農業防災智慧通知、結合 LLM 生成天氣播報稿。
-- **單元 23：回顧與重點整理**  
-  - 總結 API 介接、JSON 處理、SQLite、Streamlit 與 AI 輔助開發整體流程。
-- **單元 24：下一步：繼續探索**  
-  - 探索政府更多 Open Data API、結合機器學習模型預測天氣、打造專屬實戰作品集。
+</details>
 
 ---
 
 ## 📂 專案目錄結構 (Project Structure)
 
 ```text
-.
-├── fetch_weather.py      # [單元 4] 呼叫 CWA API 取得原始資料
-├── parse_weather.py      # [單元 5-7] 解析 JSON 並利用 Pandas 處理結構
-├── database.py           # [單元 8-10] 初始化 SQLite 資料表並寫入資料
-├── app.py                # [單元 11-19] Streamlit Web 應用程式 (儀表板與地圖)
-├── data.db               # [單元 8] SQLite 實體資料庫檔案
-├── weather_data.csv      # (可選) 解析後之中繼 CSV 檔案
-├── requirements.txt      # 專案套件清單
-├── workflow.md           # 英文版開發流程與作業規範
-└── README.md             # 專案首頁說明文件 (本檔案)
+d:/File/
+├── fetch_weather.py     # [Phase 1] 串接 CWA API 下載原始預報 JSON
+├── parse_weather.py     # [Phase 2] 解析 JSON 並利用 Pandas 結構化資料
+├── database.py          # [Phase 3] 初始化 SQLite 資料庫並匯入資料
+├── app.py               # [Phase 4 & 5] Streamlit Web 應用主程式
+├── data.db              # [Phase 3] SQLite 資料庫檔案
+├── requirements.txt     # Python 依賴套件清單
+├── workflow.md          # 英文版開發作業流程與評分量表 (Rubric)
+└── README.md            # 專案首頁說明文件
 ```
 
 ---
 
 ## ⚡ 快速開始指南 (Quick Start Guide)
 
-### 1. 建立並啟用虛擬環境
+### 1️⃣ 建立虛擬環境 (建議)
 ```bash
 # 建立虛擬環境
 python -m venv venv
@@ -222,12 +187,13 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-### 2. 安裝必要套件
+### 2️⃣ 安裝依賴套件
 ```bash
 pip install -r requirements.txt
 ```
 
-> **`requirements.txt` 建議內容**：
+> [!NOTE]
+> **推薦套件清單 (`requirements.txt`)**：
 > ```text
 > requests>=2.31.0
 > pandas>=2.0.0
@@ -236,70 +202,58 @@ pip install -r requirements.txt
 > streamlit-folium>=0.17.0
 > ```
 
-### 3. 設定 CWA API Key
-請前往 [中央氣象署開放資料平臺](https://opendata.cwa.gov.tw/) 註冊並取得授權碼，設定環境變數或於設定檔中使用：
+### 3️⃣ 設定 CWA API Key
+前往 [中央氣象署開放資料平臺](https://opendata.cwa.gov.tw/) 註冊取得個人授權碼：
 ```bash
 # Windows PowerShell
-$env:CWA_API_KEY="你的API授權碼"
+$env:CWA_API_KEY="YOUR_API_KEY_HERE"
 
 # Linux / macOS
-export CWA_API_KEY="你的API授權碼"
+export CWA_API_KEY="YOUR_API_KEY_HERE"
 ```
 
-### 4. 執行資料管線（爬取 ➔ 解析 ➔ 存庫）
+### 4️⃣ 執行資料處理流程 (一次性產出資料庫)
 ```bash
 python fetch_weather.py
 python parse_weather.py
 python database.py
 ```
 
-### 5. 啟動 Streamlit 互動儀表板
+### 5️⃣ 啟動 Streamlit 儀表板
 ```bash
 streamlit run app.py
 ```
-瀏覽器將自動開啟 `http://localhost:8501` 呈現互動介面。
+> 系統將自動於瀏覽器開啟 `http://localhost:8501`。
 
 ---
 
-## 💾 資料庫綱要設計 (Database Schema)
+## 💾 資料庫設計 (Database Schema)
 
-資料庫名稱：`data.db`  
-資料表名稱：`TemperatureForecasts`
+資料庫檔案：`data.db` ｜ 資料表名稱：`TemperatureForecasts`
 
 ```sql
 CREATE TABLE IF NOT EXISTS TemperatureForecasts (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,  -- 主鍵
-    regionName TEXT NOT NULL,              -- 地區名稱 (如：北部地區、中部地區等)
-    dataDate TEXT NOT NULL,                -- 預報日期 (格式：YYYY-MM-DD)
-    minT REAL NOT NULL,                    -- 最低氣溫 (°C)
-    maxT REAL NOT NULL                     -- 最高氣溫 (°C)
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,  -- 唯一識別碼
+    regionName TEXT    NOT NULL,                  -- 地區名稱 (北部、中部、南部等)
+    dataDate   TEXT    NOT NULL,                  -- 預報日期 (YYYY-MM-DD)
+    minT       REAL    NOT NULL,                  -- 最低氣溫 (°C)
+    maxT       REAL    NOT NULL                   -- 最高氣溫 (°C)
 );
 ```
 
 ---
 
-## 💡 程式碼品質規範 (Code Quality & Best Practices)
+## 🛡️ 工程規範與最佳實踐 (Best Practices)
 
-1. **結構清晰**：遵循單一職責原則（SRP），API 抓取、資料解析、資料庫操作與 Web 呈現各有獨立模組。
-2. **錯誤處理**：對網路請求（Timeout、HTTP 狀態碼）與資料解析（KeyError、IndexError）皆有 `try-except` 保護。
-3. **防止重複插入 (Idempotence)**：每次重新匯入資料時，使用交易機制清空對應日期或使用 `INSERT OR REPLACE` 確保資料不重複膨脹。
-4. **安全原則**：嚴禁將 CWA API Key 硬編碼推送到公開 GitHub 倉庫中。
-
----
-
-## 🚀 未來延伸應用 (Future Possibilities)
-
-- 📲 **天氣提醒 LINE Bot**：每日清晨定時推播當日氣溫與攜帶雨具提醒。
-- 🗺️ **旅遊行程智慧助手**：輸入景點行程，自動串接沿途區域未來 7 天降雨機率與氣溫。
-- 🌾 **農業與防災預警系統**：針對寒流（低於 10°C）或極端高溫（高於 36°C）觸發即時通知。
-- 🤖 **結合 LLM 天氣主播**：整合 Gemini / OpenAI API，將結構化數字轉化為幽默風趣的口語化播報。
+> [!IMPORTANT]
+> 1. **金鑰安全保護**：嚴禁將個人 CWA API Key 明文寫入程式碼或提交（Commit）至 GitHub，應使用環境變數管理。
+> 2. **架構解耦**：Streamlit 前端頁面**嚴格要求自本機 SQLite (`data.db`) 讀取資料**，不可在頁面渲染時直接連線外部 API，以確保連線速度與離線可用性。
+> 3. **資料冪等性 (Idempotence)**：重新抓取資料時，應以日期與區域更新舊資料，避免重複插入造成資料筆數膨脹。
+> 4. **完整性覆蓋**：資料需完整涵蓋台灣六大分區，且每個區域必須有完整的 7 天高低溫數據。
 
 ---
 
-## 👨‍🏫 關於課程 (About the Course)
+## 👨‍🏫 課程導師與版權資訊
 
-* **導師**：煥哥（與你一起用 AI 寫程式，探索更大的世界！）
-* **願景**：*AI for Learning, AI for a Better Taiwan.*
-#   C W A  
- #   C W A  
- 
+* **指導講師**：煥哥（帶領大家用 AI 寫程式，探索更寬廣的世界！）
+* **核心理念**：*AI for Learning, AI for a Better Taiwan.*
