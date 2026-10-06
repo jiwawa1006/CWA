@@ -22,42 +22,15 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-    /* ── Hide Streamlit chrome ── */
-    #MainMenu,
-    header[data-testid="stHeader"],
-    footer,
-    [data-testid="stToolbar"],
-    [data-testid="stDecoration"],
-    [data-testid="stStatusWidget"] {
-        display: none !important;
-        height: 0 !important;
-        overflow: hidden !important;
-    }
-
-    /* ── Remove all page padding so map fills edge-to-edge ── */
     .block-container {
         max-width: 100% !important;
-        padding: 0 !important;
-        margin: 0 !important;
+        padding: 0.2rem !important;
     }
+</style>
+""", unsafe_allow_html=True)
 
-    /* ── Stretch the folium iframe to fill the full viewport ── */
-    [data-testid="stMain"],
-    [data-testid="stAppViewContainer"],
-    [data-testid="stVerticalBlock"] {
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-
-    [data-testid="stIFrame"],
-    [data-testid="stIFrame"] iframe {
-        height: 100vh !important;
-        width: 100% !important;
-        display: block !important;
-        border: none !important;
-    }
-
-    /* ── Map controls overlay – top-left ── */
+st.markdown("""
+<style>
     div.st-key-map_controls {
         position: absolute;
         top: 1rem;
@@ -66,10 +39,12 @@ st.markdown("""
         width: 330px;
         padding: 0.8rem;
         background: rgba(15, 23, 42, 0.97) !important;
-        border: 1px solid #475569 !important;
+        border: 1px solid #475569;
         border-radius: 12px;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-        /* position:absolute takes this out of flow – no height:0 needed */
+        /* zero-height so it doesn't push the map down */
+        height: 0;
+        overflow: visible;
     }
 
     div.st-key-map_controls,
@@ -85,22 +60,35 @@ st.markdown("""
         border-color: #64748b;
     }
 
-    /* ── Region details overlay – top-right ── */
+    /* Region details overlay – right side of the map */
     div.st-key-region_details {
         position: absolute;
-        top: 1rem;
-        right: 1rem;
+        top: 2rem;
+        right: 2rem;
         z-index: 1000;
-        width: 390px;
-        max-height: calc(100vh - 3rem);
-        overflow-x: hidden;
+        width: 340px;
+        max-height: calc(100vh - 5rem);
         overflow-y: auto;
+        padding: 0;
+        background: transparent !important;
+        border: none;
+        box-shadow: none;
+        /* zero-height so it doesn't push the map down */
+        height: 0;
+        overflow: visible;
         scrollbar-width: thin;
+    }
+
+    /* The inner border box lives on the child div, not the wrapper */
+    div.st-key-region_details > div {
         padding: 0.85rem 1rem;
         background: rgba(15, 23, 42, 0.97) !important;
-        border: 1px solid #475569 !important;
+        border: 1px solid #475569;
         border-radius: 12px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+        max-height: calc(100vh - 5rem);
+        overflow-y: auto;
+        scrollbar-width: thin;
     }
 
     div.st-key-region_details,
@@ -112,14 +100,6 @@ st.markdown("""
     div.st-key-region_details [data-testid="stMetricValue"],
     div.st-key-region_details [data-testid="stMetricLabel"] {
         color: #f8fafc !important;
-    }
-
-    /* Prevent metric values from being clipped in narrow 3-column layout */
-    div.st-key-region_details [data-testid="stMetricValue"] {
-        font-size: 0.95rem !important;
-        white-space: nowrap !important;
-        overflow: visible !important;
-        text-overflow: unset !important;
     }
 
     div.st-key-region_details hr {
@@ -136,9 +116,33 @@ st.markdown("""
 
 try:
     from src import database
+    from src.fetch_weather import fetch_weather_data
+    from src.parse_weather import parse_weather_data
 except ImportError as e:
     st.error(f"無法載入資料庫模組：{e}")
     st.stop()
+
+
+def _bootstrap_db():
+    """Initialize the DB and fetch data from CWA if the table is empty."""
+    database.init_db()
+    if database.is_empty():
+        with st.spinner("首次啟動：正在從 CWA 取得即時氣象資料，請稍候…"):
+            ok = fetch_weather_data()
+            if not ok:
+                st.error(
+                    "無法從中央氣象署 API 取得資料。"
+                    "請確認 CWA_API_KEY 已在 Streamlit Secrets 中設定。"
+                )
+                st.stop()
+            df = parse_weather_data()
+            if df is None or df.empty:
+                st.error("資料解析失敗，請檢查 API 回傳內容。")
+                st.stop()
+            database.insert_observations(df)
+
+
+_bootstrap_db()
 
 
 # Approximate county/city centers, used to place value labels.
@@ -655,7 +659,7 @@ legend_html = f"""
 <div style="
     position: fixed;
     left: 1rem;
-    bottom: 2rem;
+    bottom: 1rem;
     z-index: 10000;
     width: 330px;
     padding: 0.8rem;
