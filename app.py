@@ -674,7 +674,7 @@ weather_map.get_root().html.add_child(Element(legend_html))
 map_data = st_folium(
     weather_map,
     width="stretch",
-    height=720,
+    height=980,
     returned_objects=["last_object_clicked_tooltip"],
 )
 
