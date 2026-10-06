@@ -22,31 +22,9 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-    /* ── Hide Streamlit chrome (header / toolbar / footer) ── */
-    #MainMenu,
-    header[data-testid="stHeader"],
-    footer,
-    [data-testid="stToolbar"],
-    [data-testid="stDecoration"],
-    [data-testid="stStatusWidget"] {
-        display: none !important;
-        visibility: hidden !important;
-        height: 0 !important;
-    }
-
-    /* ── Remove all page padding so map is edge-to-edge ── */
-    html, body,
-    [data-testid="stAppViewContainer"],
-    [data-testid="stApp"] {
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow: hidden !important;
-    }
-
     .block-container {
         max-width: 100% !important;
-        padding: 0 !important;
-        margin: 0 !important;
+        padding: 0.2rem !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -145,26 +123,27 @@ except ImportError as e:
     st.stop()
 
 
-def _bootstrap_db():
-    """Initialize the DB and fetch data from CWA if the table is empty."""
+# Bootstrap the DB silently on the very first run (no Streamlit elements injected
+# into the layout so the fixed-position overlays are not displaced).
+if "_db_ready" not in st.session_state:
     database.init_db()
     if database.is_empty():
-        with st.spinner("首次啟動：正在從 CWA 取得即時氣象資料，請稍候…"):
-            ok = fetch_weather_data()
-            if not ok:
-                st.error(
-                    "無法從中央氣象署 API 取得資料。"
-                    "請確認 CWA_API_KEY 已在 Streamlit Secrets 中設定。"
-                )
-                st.stop()
-            df = parse_weather_data()
-            if df is None or df.empty:
-                st.error("資料解析失敗，請檢查 API 回傳內容。")
-                st.stop()
-            database.insert_observations(df)
-
-
-_bootstrap_db()
+        _placeholder = st.empty()
+        _placeholder.info("首次啟動：正在從 CWA 取得即時氣象資料，請稍候…")
+        _ok = fetch_weather_data()
+        if not _ok:
+            st.error(
+                "無法從中央氣象署 API 取得資料。"
+                "請確認 CWA_API_KEY 已在 Streamlit Secrets 中設定。"
+            )
+            st.stop()
+        _df = parse_weather_data()
+        if _df is None or _df.empty:
+            st.error("資料解析失敗，請檢查 API 回傳內容。")
+            st.stop()
+        database.insert_observations(_df)
+        _placeholder.empty()   # remove the info message immediately
+    st.session_state["_db_ready"] = True
 
 
 # Approximate county/city centers, used to place value labels.
@@ -681,7 +660,7 @@ legend_html = f"""
 <div style="
     position: fixed;
     left: 1rem;
-    bottom: 1rem;
+    bottom: 4rem;
     z-index: 10000;
     width: 330px;
     padding: 0.8rem;
@@ -708,8 +687,8 @@ weather_map.get_root().html.add_child(Element(legend_html))
 
 map_data = st_folium(
     weather_map,
-    use_container_width=True,
-    height=900,
+    width="stretch",
+    height=720,
     returned_objects=["last_object_clicked_tooltip"],
 )
 
