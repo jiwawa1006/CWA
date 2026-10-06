@@ -82,7 +82,7 @@ st.markdown("""
         top: 1rem;
         right: 1rem;
         z-index: 1000;
-        width: 390px;
+        width: 460px;
         max-height: calc(100vh - 3rem);
         overflow-x: hidden;
         overflow-y: auto;
