@@ -67,28 +67,16 @@ st.markdown("""
         right: 2rem;
         z-index: 1000;
         width: 340px;
+        /* position:absolute removes this from flow – no height:0 trick needed */
         max-height: calc(100vh - 5rem);
+        overflow-x: hidden;
         overflow-y: auto;
-        padding: 0;
-        background: transparent !important;
-        border: none;
-        box-shadow: none;
-        /* zero-height so it doesn't push the map down */
-        height: 0;
-        overflow: visible;
         scrollbar-width: thin;
-    }
-
-    /* The inner border box lives on the child div, not the wrapper */
-    div.st-key-region_details > div {
         padding: 0.85rem 1rem;
         background: rgba(15, 23, 42, 0.97) !important;
-        border: 1px solid #475569;
+        border: 1px solid #475569 !important;
         border-radius: 12px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
-        max-height: calc(100vh - 5rem);
-        overflow-y: auto;
-        scrollbar-width: thin;
     }
 
     div.st-key-region_details,
