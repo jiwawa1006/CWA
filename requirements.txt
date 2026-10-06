@@ -1,5 +1,6 @@
 requests
 pandas
-streamlit
 folium
+streamlit
 streamlit-folium
+python-dotenv
