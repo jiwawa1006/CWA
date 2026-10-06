@@ -22,15 +22,13 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-    /* ── Hide Streamlit chrome (header / toolbar / footer / deploy badge) ── */
+    /* ── Hide Streamlit chrome (header / toolbar / footer) ── */
     #MainMenu,
     header[data-testid="stHeader"],
     footer,
     [data-testid="stToolbar"],
     [data-testid="stDecoration"],
-    [data-testid="stStatusWidget"],
-    .viewerBadge_container__r5tak,
-    [data-testid="manage-app-button"] {
+    [data-testid="stStatusWidget"] {
         display: none !important;
         visibility: hidden !important;
         height: 0 !important;
@@ -50,45 +48,25 @@ st.markdown("""
         padding: 0 !important;
         margin: 0 !important;
     }
-
-    /* ── Force map iframe to fill the viewport exactly ── */
-    [data-testid="stIFrame"], iframe {
-        width: 100vw !important;
-        height: 100vh !important;
-        border: none !important;
-        display: block !important;
-    }
 </style>
 """, unsafe_allow_html=True)
 
 st.markdown("""
 <style>
-    /* ── Map controls overlay – top-left ── */
-    /* The wrapper is zero-height so it doesn't push content down.
-       No border/background here — those live on the child > div. */
     div.st-key-map_controls {
         position: absolute;
         top: 1rem;
         left: 1rem;
         z-index: 1000;
         width: 330px;
-        height: 0;
-        overflow: visible;
-        /* Strip the st.container(border=True) styling */
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-        border-radius: 0 !important;
-        padding: 0 !important;
-    }
-
-    /* Actual visible panel lives on the first child div */
-    div.st-key-map_controls > div {
         padding: 0.8rem;
         background: rgba(15, 23, 42, 0.97) !important;
         border: 1px solid #475569;
         border-radius: 12px;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+        /* zero-height so it doesn't push the map down */
+        height: 0;
+        overflow: visible;
     }
 
     div.st-key-map_controls,
@@ -393,7 +371,7 @@ if (
 
 
 # Compact control card at the upper left.
-with st.container(key="map_controls"):
+with st.container(key="map_controls", border=True):
     st.markdown("### ⛅ 台灣即時氣象地圖")
 
     base_map = st.radio(
@@ -582,7 +560,7 @@ for _, row in county_data.iterrows():
 active_region = st.session_state.active_region
 
 if active_region:
-    with st.container(key="region_details"):
+    with st.container(key="region_details", border=True):
         st.markdown(f"## 📍 {active_region}")
 
         latest_region_rows = df_map[df_map["regionName"] == active_region]
@@ -731,7 +709,7 @@ weather_map.get_root().html.add_child(Element(legend_html))
 map_data = st_folium(
     weather_map,
     use_container_width=True,
-    height=780,
+    height=900,
     returned_objects=["last_object_clicked_tooltip"],
 )
 
