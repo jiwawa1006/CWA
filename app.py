@@ -178,7 +178,7 @@ COORDINATES = {
 # The GeoJSON county names differ slightly from CWA's names.
 GEO_MAPPING = {
     "臺北市": "台北市",
-    "新北市": "台北縣",
+    "新北市": "新北市",
     "桃園市": "桃園縣",
     "臺中市": "台中市",
     "臺南市": "台南市",
