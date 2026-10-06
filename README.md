@@ -11,7 +11,7 @@
 
 **👉 [https://twweatherapp.streamlit.app](https://twweatherapp.streamlit.app)**
 
-<!-- 請將截圖放在此處，例如：![截圖](docs/screenshot.png) -->
+![台灣即時氣象地圖截圖](doc/screenshot.png)
 
 ---
 
