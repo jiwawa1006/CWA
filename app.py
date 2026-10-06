@@ -20,10 +20,9 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-
 st.markdown("""
 <style>
-    /* ── Hide Streamlit chrome ── */
+    /* ── Hide Streamlit chrome (header / toolbar / footer) ── */
     #MainMenu,
     header[data-testid="stHeader"],
     footer,
@@ -36,11 +35,12 @@ st.markdown("""
     }
 
     /* ── Remove all page padding so map is edge-to-edge ── */
-    html, body, [data-testid="stAppViewContainer"],
+    html, body,
+    [data-testid="stAppViewContainer"],
     [data-testid="stApp"] {
         margin: 0 !important;
         padding: 0 !important;
-        overflow: hidden;
+        overflow: hidden !important;
     }
 
     .block-container {
@@ -48,8 +48,11 @@ st.markdown("""
         padding: 0 !important;
         margin: 0 !important;
     }
+</style>
+""", unsafe_allow_html=True)
 
-    /* ── Map controls overlay – top-left ── */
+st.markdown("""
+<style>
     div.st-key-map_controls {
         position: absolute;
         top: 1rem;
@@ -61,6 +64,7 @@ st.markdown("""
         border: 1px solid #475569;
         border-radius: 12px;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+        /* zero-height so it doesn't push the map down */
         height: 0;
         overflow: visible;
     }
@@ -78,22 +82,26 @@ st.markdown("""
         border-color: #64748b;
     }
 
-    /* ── Region details overlay – top-right ── */
+    /* Region details overlay – right side of the map */
     div.st-key-region_details {
         position: absolute;
         top: 2rem;
         right: 2rem;
         z-index: 1000;
         width: 340px;
+        max-height: calc(100vh - 5rem);
+        overflow-y: auto;
         padding: 0;
         background: transparent !important;
         border: none;
         box-shadow: none;
+        /* zero-height so it doesn't push the map down */
         height: 0;
         overflow: visible;
         scrollbar-width: thin;
     }
 
+    /* The inner border box lives on the child div, not the wrapper */
     div.st-key-region_details > div {
         padding: 0.85rem 1rem;
         background: rgba(15, 23, 42, 0.97) !important;
@@ -124,15 +132,6 @@ st.markdown("""
         background: rgba(30, 41, 59, 0.8);
         border-radius: 8px;
         padding: 6px 8px;
-    }
-
-    /* ── Make the folium iframe fill the full viewport ── */
-    [data-testid="stIFrame"],
-    iframe {
-        width: 100vw !important;
-        height: 100vh !important;
-        border: none !important;
-        display: block !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -709,8 +708,8 @@ weather_map.get_root().html.add_child(Element(legend_html))
 
 map_data = st_folium(
     weather_map,
-    width="100%",
-    height="100vh",
+    use_container_width=True,
+    height=900,
     returned_objects=["last_object_clicked_tooltip"],
 )
 
