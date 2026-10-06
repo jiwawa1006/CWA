@@ -116,34 +116,9 @@ st.markdown("""
 
 try:
     from src import database
-    from src.fetch_weather import fetch_weather_data
-    from src.parse_weather import parse_weather_data
 except ImportError as e:
     st.error(f"無法載入資料庫模組：{e}")
     st.stop()
-
-
-# Bootstrap the DB silently on the very first run (no Streamlit elements injected
-# into the layout so the fixed-position overlays are not displaced).
-if "_db_ready" not in st.session_state:
-    database.init_db()
-    if database.is_empty():
-        _placeholder = st.empty()
-        _placeholder.info("首次啟動：正在從 CWA 取得即時氣象資料，請稍候…")
-        _ok = fetch_weather_data()
-        if not _ok:
-            st.error(
-                "無法從中央氣象署 API 取得資料。"
-                "請確認 CWA_API_KEY 已在 Streamlit Secrets 中設定。"
-            )
-            st.stop()
-        _df = parse_weather_data()
-        if _df is None or _df.empty:
-            st.error("資料解析失敗，請檢查 API 回傳內容。")
-            st.stop()
-        database.insert_observations(_df)
-        _placeholder.empty()   # remove the info message immediately
-    st.session_state["_db_ready"] = True
 
 
 # Approximate county/city centers, used to place value labels.
@@ -660,7 +635,7 @@ legend_html = f"""
 <div style="
     position: fixed;
     left: 1rem;
-    bottom: 4rem;
+    bottom: 1rem;
     z-index: 10000;
     width: 330px;
     padding: 0.8rem;
