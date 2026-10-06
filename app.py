@@ -41,15 +41,21 @@ st.markdown("""
         margin: 0 !important;
     }
 
-    /* Remove padding from all Streamlit layout wrappers */
+    /* Remove padding from Streamlit page-level wrappers only (not inner blocks) */
     [data-testid="stApp"],
     [data-testid="stAppViewContainer"],
     [data-testid="stMain"],
-    [data-testid="stMainBlockContainer"],
-    [data-testid="stVerticalBlock"] {
+    [data-testid="stMainBlockContainer"] {
         padding: 0 !important;
         margin: 0 !important;
-        gap: 0 !important;
+    }
+
+    /* Clamp page to viewport so nothing bleeds below the map */
+    html, body,
+    [data-testid="stApp"],
+    [data-testid="stAppViewContainer"] {
+        height: 100vh !important;
+        overflow: hidden !important;
     }
 
     /* ── Stretch the folium iframe to fill the full viewport ── */
