@@ -22,9 +22,36 @@ st.set_page_config(
 
 st.markdown("""
 <style>
+    /* ── Hide Streamlit chrome ── */
+    #MainMenu,
+    header[data-testid="stHeader"],
+    footer,
+    [data-testid="stToolbar"],
+    [data-testid="stDecoration"],
+    [data-testid="stStatusWidget"] {
+        display: none !important;
+        height: 0 !important;
+    }
+
+    /* ── Zero out all page spacing so the map is edge-to-edge ── */
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
     .block-container {
         max-width: 100% !important;
-        padding: 0.2rem !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* ── Force the folium iframe to fill the full viewport ── */
+    [data-testid="stIFrame"],
+    iframe {
+        width: 100% !important;
+        height: 100vh !important;
+        border: none !important;
+        display: block !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -66,7 +93,7 @@ st.markdown("""
         top: 2rem;
         right: 2rem;
         z-index: 1000;
-        width: 340px;
+        width: 380px;
         /* position:absolute removes this from flow – no height:0 trick needed */
         max-height: calc(100vh - 5rem);
         overflow-x: hidden;
@@ -650,8 +677,8 @@ weather_map.get_root().html.add_child(Element(legend_html))
 
 map_data = st_folium(
     weather_map,
-    width="stretch",
-    height=720,
+    use_container_width=True,
+    height=800,
     returned_objects=["last_object_clicked_tooltip"],
 )
 
