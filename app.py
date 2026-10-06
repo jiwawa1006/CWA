@@ -41,6 +41,17 @@ st.markdown("""
         margin: 0 !important;
     }
 
+    /* Remove padding from all Streamlit layout wrappers */
+    [data-testid="stApp"],
+    [data-testid="stAppViewContainer"],
+    [data-testid="stMain"],
+    [data-testid="stMainBlockContainer"],
+    [data-testid="stVerticalBlock"] {
+        padding: 0 !important;
+        margin: 0 !important;
+        gap: 0 !important;
+    }
+
     /* ── Stretch the folium iframe to fill the full viewport ── */
     [data-testid="stIFrame"] {
         height: 100vh !important;
