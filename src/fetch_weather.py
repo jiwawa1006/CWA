@@ -17,15 +17,17 @@ def _get_env(key: str, default: str = "") -> str:
     except Exception:
         return default
 
-API_PATH = _get_env("CWA_API")
-API_URL = f"https://opendata.cwa.gov.tw{API_PATH}"
 RAW_DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "weather_raw.json")
 
 
 def fetch_weather_data():
-    """"""
+    """Fetch latest weather observations from the CWA Open Data API and save raw JSON."""
 
-    api_key = _get_env("CWA_API_KEY")
+    # Resolve at call time so st.secrets is available (module-level resolution fails on Cloud).
+    api_path = _get_env("CWA_API")
+    api_url  = f"https://opendata.cwa.gov.tw{api_path}"
+    api_key  = _get_env("CWA_API_KEY")
+
     
     if not api_key:
         print("Error: CWA_API_KEY is not set")
@@ -36,12 +38,12 @@ def fetch_weather_data():
         "Authorization": api_key
     }
     
-    print(f"Fetching data from {API_URL}...")
+    print(f"Fetching data from {api_url}...")
     
     try:
         import urllib3
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-        response = requests.get(API_URL, headers=headers, timeout=30, verify=False)
+        response = requests.get(api_url, headers=headers, timeout=30, verify=False)
         response.raise_for_status()
         data = response.json()
         success = data.get("success")

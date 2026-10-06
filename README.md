@@ -1,92 +1,130 @@
-# AIoT-CWA Taiwan Weather Forecast
+# ⛅ 台灣即時氣象地圖 · Taiwan Real-Time Weather Map
 
-## Project Purpose
-This project provides an interactive web dashboard for Taiwan's regional weather forecasts. It retrieves a 7-day weather forecast from the Central Weather Administration (CWA) Open Data API, processes the JSON response using Python and Pandas, stores the parsed temperature data in a local SQLite database, and visualizes it using a Streamlit web application. It includes features like a regional selector, interactive temperature charts, forecast data tables, and an interactive Taiwan weather map.
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://new-cwa.streamlit.app)
 
-## Architecture
-The system pipeline operates as follows:
-**CWA API → JSON → Python/Pandas → SQLite → SQL → Streamlit → Chart/Table/Map**
+An interactive, full-screen weather dashboard for Taiwan built with **Streamlit** + **Folium**.  
+Live weather observations are fetched from the [Central Weather Administration (CWA)](https://opendata.cwa.gov.tw/) Open Data API, stored in SQLite, and visualised on an interactive choropleth map.
 
-1. **Data Retrieval**: Fetch raw JSON data from the CWA Open Data API (F-A0010-001).
-2. **Data Processing**: Parse the JSON using Python/Pandas to extract minimum (MinT) and maximum (MaxT) temperatures per region and date.
-3. **Storage**: Save the cleaned tabular dataset into a local SQLite database (`data.db`).
-4. **Visualization**: Query the database using Streamlit to present data via interactive line charts, data tables, and an optional Folium map.
+---
 
-## Project Structure
-```text
-AIoT-CWA/
-├── data/
-│   └── weather_raw.json      # Raw JSON response for debugging
+## 🌐 Live Demo
+
+**👉 [https://new-cwa.streamlit.app](https://new-cwa.streamlit.app)**
+
+---
+
+## ✨ Features
+
+| Feature | Description |
+|---|---|
+| 🗺️ **Full-screen choropleth map** | Taiwan counties coloured by temperature, rainfall, humidity, wind speed, or pressure |
+| 📍 **Region detail panel** | Click any county to see current metrics and a 24-observation history chart |
+| 🎨 **Map style switcher** | Dark / Light / Street tile modes |
+| 📊 **5 weather layers** | Temperature · Rainfall · Humidity · Wind speed · Station pressure |
+| 🔄 **Auto-refresh** | Data cached for 5 minutes; map re-queries on every visit |
+
+---
+
+## 🗂️ Project Structure
+
+```
+new_cwa/
+├── app.py                        # Streamlit dashboard (single-page app)
 ├── src/
-│   ├── fetch_weather.py      # Script to retrieve data from CWA API
-│   ├── parse_weather.py      # Script to parse JSON into tabular format
-│   └── database.py           # SQLite database initialization and queries
-├── app.py                    # Streamlit web dashboard
-├── data.db                   # SQLite database (generated)
-├── requirements.txt          # Python dependencies
-├── .env.example              # Example environment variables file
-├── .env                      # Local environment variables file (not tracked)
-├── .gitignore                # Git ignore rules
-└── README.md                 # Project documentation
+│   ├── __init__.py
+│   ├── fetch_weather.py          # Fetch raw JSON from CWA API
+│   ├── parse_weather.py          # Parse JSON → Pandas DataFrame
+│   └── database.py               # SQLite init, insert, and query helpers
+├── data/
+│   ├── taiwan.geojson            # County boundary polygons
+│   └── weather_raw.json          # Latest raw API response (gitignored)
+├── .streamlit/
+│   └── secrets.toml.example      # Template for Streamlit Secrets
+├── requirements.txt
+├── .env                          # Local API keys (gitignored)
+└── .gitignore
 ```
 
-## Installation
-1. Clone this repository to your local machine:
-   ```bash
-   git clone https://github.com/your-username/AIoT-CWA.git
-   cd AIoT-CWA
-   ```
-2. Create and activate a virtual environment (recommended):
-   ```bash
-   python -m venv venv
-   # Windows:
-   venv\Scripts\activate
-   # macOS/Linux:
-   source venv/bin/activate
-   ```
-3. Install the required dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+---
 
-## API Key Configuration
-1. Obtain an API authorization key from the [CWA Open Data Portal](https://opendata.cwa.gov.tw/).
-2. Copy the example environment file:
-   ```bash
-   cp .env.example .env
-   ```
-3. Open `.env` and add your CWA API key:
-   ```env
-   CWA_API_KEY=your_api_key_here
-   ```
+## 🚀 Local Setup
 
-## Database Setup and Data-Fetch Procedure
-To initialize the SQLite database and fetch the latest weather forecast data:
-1. Ensure your `.env` is correctly configured with your API key.
-2. Run the fetch script to get the raw JSON data:
-   ```bash
-   python src/fetch_weather.py
-   ```
-3. Run the parse script to insert the data into the database:
-   ```bash
-   python src/parse_weather.py
-   ```
+### 1. Clone & install
 
-## Streamlit Execution
-To run the interactive web dashboard:
+```bash
+git clone https://github.com/jiwawa1006/new_cwa.git
+cd new_cwa
+python -m venv .venv
+# Windows
+.venv\Scripts\activate
+# macOS / Linux
+source .venv/bin/activate
+
+pip install -r requirements.txt
+```
+
+### 2. Configure API keys
+
+Copy the example and fill in your keys:
+
+```bash
+cp .env.example .env   # or create .env manually
+```
+
+`.env` contents:
+
+```env
+CWA_API_KEY=CWA-XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+CWA_API=/api/v1/rest/datastore/O-A0001-001
+MAP_API_KEY=          # optional – CARTO tile key
+```
+
+> Get a free API key from the [CWA Open Data Portal](https://opendata.cwa.gov.tw/).
+
+### 3. Seed the database (first run only)
+
+```bash
+python src/fetch_weather.py   # downloads weather_raw.json
+python src/database.py        # creates data.db and inserts observations
+```
+
+### 4. Run the app
+
 ```bash
 streamlit run app.py
 ```
-Then, open the provided local URL (usually `http://localhost:8501`) in your web browser.
 
-## Features
-- **Region Selector**: Choose a specific region in Taiwan (e.g., Northern, Central, Southern, Eastern) to view its forecast.
-- **Temperature Chart**: View interactive line charts for Minimum (MinT) and Maximum (MaxT) temperatures over a 7-day period.
-- **Forecast Table**: A tabular data view of the forecast dates and temperatures.
-- **Interactive Taiwan Map (Optional)**: A Folium-based interactive map displaying Taiwan's regions with color-coded markers based on average temperature (<20°C: blue, 20-25°C: green, 25-30°C: yellow, >30°C: red).
+Open **http://localhost:8501** in your browser.
 
-## Screenshots
-*(Add screenshots of your application dashboard here - Chart, Table, and Map)*
+---
 
-## GitHub Usage
-When pushing your project to GitHub, ensure that your `.env` file (containing your private API key) and the generated `data.db` database file are added to your `.gitignore` to prevent sensitive data or local state from being committed.
+## ☁️ Deploying to Streamlit Community Cloud
+
+1. Push the repo to GitHub (`.env` and `data.db` are gitignored — that's intentional).
+2. Go to [share.streamlit.io](https://share.streamlit.io) → **New app** → select this repo / `app.py`.
+3. In **App settings → Secrets**, paste:
+
+```toml
+CWA_API_KEY = "CWA-XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+CWA_API     = "/api/v1/rest/datastore/O-A0001-001"
+MAP_API_KEY = ""   # optional
+```
+
+4. Deploy. On first load the app will auto-fetch and seed the database.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Python 3.11+**
+- [Streamlit](https://streamlit.io/) — web framework
+- [Folium](https://python-visualization.github.io/folium/) + [streamlit-folium](https://folium.streamlit.app/) — interactive map
+- [Pandas](https://pandas.pydata.org/) — data processing
+- [SQLite](https://www.sqlite.org/) — lightweight local database
+- [CWA Open Data API](https://opendata.cwa.gov.tw/) — real-time weather source
+
+---
+
+## 📄 License
+
+MIT
