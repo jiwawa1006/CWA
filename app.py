@@ -42,10 +42,19 @@ st.markdown("""
     }
 
     /* ── Stretch the folium iframe to fill the full viewport ── */
-    [data-testid="stIFrame"] {
+    [data-testid="stMain"],
+    [data-testid="stAppViewContainer"],
+    [data-testid="stVerticalBlock"] {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    [data-testid="stIFrame"],
+    [data-testid="stIFrame"] iframe {
         height: 100vh !important;
         width: 100% !important;
         display: block !important;
+        border: none !important;
     }
 
     /* ── Map controls overlay – top-left ── */
@@ -107,7 +116,7 @@ st.markdown("""
 
     /* Prevent metric values from being clipped in narrow 3-column layout */
     div.st-key-region_details [data-testid="stMetricValue"] {
-        font-size: 1.2rem !important;
+        font-size: 0.95rem !important;
         white-space: nowrap !important;
         overflow: visible !important;
         text-overflow: unset !important;
@@ -674,7 +683,7 @@ weather_map.get_root().html.add_child(Element(legend_html))
 map_data = st_folium(
     weather_map,
     width="stretch",
-    height=980,
+    height=720,
     returned_objects=["last_object_clicked_tooltip"],
 )
 
