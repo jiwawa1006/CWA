@@ -1,6 +1,6 @@
 # ⛅ 台灣即時氣象地圖 · Taiwan Real-Time Weather Map
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://new-cwa.streamlit.app)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://twweatherapp.streamlit.app)
 
 An interactive, full-screen weather dashboard for Taiwan built with **Streamlit** + **Folium**.  
 Live weather observations are fetched from the [Central Weather Administration (CWA)](https://opendata.cwa.gov.tw/) Open Data API, stored in SQLite, and visualised on an interactive choropleth map.
@@ -9,7 +9,7 @@ Live weather observations are fetched from the [Central Weather Administration (
 
 ## 🌐 Live Demo
 
-**👉 [https://new-cwa.streamlit.app](https://new-cwa.streamlit.app)**
+**👉 [https://twweatherapp.streamlit.app](https://twweatherapp.streamlit.app)**
 
 ---
 
