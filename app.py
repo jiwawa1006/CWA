@@ -116,9 +116,33 @@ st.markdown("""
 
 try:
     from src import database
+    from src.fetch_weather import fetch_weather_data
+    from src.parse_weather import parse_weather_data
 except ImportError as e:
     st.error(f"無法載入資料庫模組：{e}")
     st.stop()
+
+
+def _bootstrap_db():
+    """Initialize the DB and fetch data from CWA if the table is empty."""
+    database.init_db()
+    if database.is_empty():
+        with st.spinner("首次啟動：正在從 CWA 取得即時氣象資料，請稍候…"):
+            ok = fetch_weather_data()
+            if not ok:
+                st.error(
+                    "無法從中央氣象署 API 取得資料。"
+                    "請確認 CWA_API_KEY 已在 Streamlit Secrets 中設定。"
+                )
+                st.stop()
+            df = parse_weather_data()
+            if df is None or df.empty:
+                st.error("資料解析失敗，請檢查 API 回傳內容。")
+                st.stop()
+            database.insert_observations(df)
+
+
+_bootstrap_db()
 
 
 # Approximate county/city centers, used to place value labels.

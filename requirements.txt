@@ -4,3 +4,4 @@ folium
 streamlit
 streamlit-folium
 python-dotenv
+urllib3

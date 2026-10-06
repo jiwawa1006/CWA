@@ -71,7 +71,24 @@ def insert_observations(df):
     conn.close()
     print(f"Successfully saved {len(rows)} weather observations.")
 
+def is_empty() -> bool:
+    """Return True when WeatherObservations doesn't exist or has no rows."""
+    conn = get_connection()
+    try:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='WeatherObservations'"
+        )
+        if cursor.fetchone() is None:
+            return True
+        cursor.execute("SELECT COUNT(*) FROM WeatherObservations")
+        return cursor.fetchone()[0] == 0
+    finally:
+        conn.close()
+
+
 def get_all_regions():
+
     """"""
 
     conn = get_connection()

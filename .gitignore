@@ -19,3 +19,6 @@ venv.bak/
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# Streamlit secrets (real keys – never commit)
+.streamlit/secrets.toml

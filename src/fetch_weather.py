@@ -6,14 +6,26 @@ from dotenv import load_dotenv
 env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
 load_dotenv(dotenv_path=env_path)
 
-API_PATH = os.environ.get("CWA_API")
+# On Streamlit Cloud, .env is not deployed; fall back to st.secrets if needed.
+def _get_env(key: str, default: str = "") -> str:
+    value = os.environ.get(key, "")
+    if value:
+        return value
+    try:
+        import streamlit as st
+        return st.secrets.get(key, default)
+    except Exception:
+        return default
+
+API_PATH = _get_env("CWA_API")
 API_URL = f"https://opendata.cwa.gov.tw{API_PATH}"
 RAW_DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "weather_raw.json")
+
 
 def fetch_weather_data():
     """"""
 
-    api_key = os.getenv("CWA_API_KEY")
+    api_key = _get_env("CWA_API_KEY")
     
     if not api_key:
         print("Error: CWA_API_KEY is not set")
